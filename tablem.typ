@@ -68,7 +68,7 @@
       // Check for horizontal merge
       let colspan = 1
       let k = j + 1
-      while k < cols and body-2d.at(i).at(k) in ([], [ ], [<]) {
+      while k < cols and body-2d.at(i).at(k) == [<] {
         colspan += 1
         k += 1
       }
@@ -76,7 +76,7 @@
       // Check for vertical merge
       let rowspan = 1
       let m = i + 1
-      while m < rows and body-2d.at(m).at(j) in ([], [ ], [^]) {
+      while m < rows and body-2d.at(m).at(j) == [^] {
         rowspan += 1
         m += 1
       }
@@ -84,7 +84,7 @@
       // Handle merged cell
       if colspan > 1 or rowspan > 1 {
         let content = body-2d.at(i).at(j)
-        
+
         // Mark cells to skip
         for r in range(i, i + rowspan) {
           for c in range(j, j + colspan) {
@@ -118,10 +118,10 @@
   let i = 0
   while i < count {
     if i >= row.len() { break }
-    if row.at(i) in ([], [ ], [<]) {
+    if row.at(i) == [<] {
       let span = 1
       let j = i + 1
-      while j < count and j < row.len() and row.at(j) in ([], [ ], [<]) {
+      while j < count and j < row.len() and row.at(j) == [<] {
         span += 1
         j += 1
       }
@@ -192,14 +192,14 @@
   } else {
     res.slice(calc.min(columns, len))
   }
-  
+
   // Process both header and body
   let header-2d = _to-2d-array(table-header, columns)
   let processed-header = _process-merged-cells(header-2d)
-  
+
   let body-2d = _to-2d-array(table-body, columns)
   let processed-body = _process-merged-cells(body-2d)
-  
+
   if use-table-header {
     render(columns: columns, ..args, table.header(..processed-header), ..processed-body)
   } else {
